@@ -3,8 +3,6 @@
 layout: default
 ---
 
-# Specification
-
 **Notice:** This is a draft of the JSONC Specification and is subject to change.
 
 ## Introduction

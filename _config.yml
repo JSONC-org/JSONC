@@ -21,6 +21,7 @@
 title: JSONC
 email: 31558169+DecimalTurn@users.noreply.github.com
 baseurl: "" # the subpath of your site, e.g. /blog
+description: Specification
 url: "https://jsonc.org" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  DecimalTurn
 
