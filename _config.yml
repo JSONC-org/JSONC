@@ -20,8 +20,6 @@
 
 title: JSONC
 email: 31558169+DecimalTurn@users.noreply.github.com
-description: >- # this means to ignore newlines until "baseurl:"
-  JSONC Specification
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://jsonc.org" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  DecimalTurn
