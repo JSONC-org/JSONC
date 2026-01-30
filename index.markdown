@@ -102,6 +102,9 @@ Here is a non-exhaustive list:
 **Python**
 - [n-takumasa/json-with-comments](https://github.com/n-takumasa/json-with-comments)
 
+**PHP**
+- [otar/jsonc](https://github.com/otar/jsonc)
+
 **Rust**
 - [dprint/jsonc-parser](https://github.com/dprint/jsonc-parser)
 
