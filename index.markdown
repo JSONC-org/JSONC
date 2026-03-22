@@ -77,6 +77,14 @@ or
 // -*- jsonc -*-
 ```
 
+## Media type
+
+When transmitting JSONC over a network, senders SHOULD use the media type `application/jsonc`.
+
+Senders SHOULD NOT use `application/json` for JSONC content, because consumers that only implement JSON may interpret the payload incorrectly or reject it due to the presence of comments and/or trailing commas.
+
+Consumers that support JSONC SHOULD accept `application/jsonc`.
+
 ## Main Use Cases
 
 - Configuration Files: JSONC is useful for configuration files where comments can provide explanations or instructions.
