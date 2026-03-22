@@ -108,6 +108,9 @@ Here is a non-exhaustive list:
 **Rust**
 - [dprint/jsonc-parser](https://github.com/dprint/jsonc-parser)
 
+**Swift**
+- [steelbrain/JSONCKit](https://github.com/steelbrain/JSONCKit)
+
 **Java**
 - [Jackson](https://github.com/FasterXML/jackson-core) `JsonFactory.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)` 
 
