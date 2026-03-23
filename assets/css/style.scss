@@ -3,6 +3,49 @@
 
 @import 'jekyll-theme-cayman';
 
+.page-header {
+  position: relative;
+}
+
+.header-repo-link {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.header-repo-link:hover,
+.header-repo-link:focus {
+  opacity: 0.78;
+}
+
+.header-repo-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.header-logo-link {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+  line-height: 0;
+}
+
+.header-logo {
+  width: 56px;
+  height: auto;
+  display: block;
+}
+
+@media screen and (max-width: 42em) {
+  .header-repo-link {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
 /* Custom Highlight.js Styles */
 .hljs-error {
     color: red !important;
