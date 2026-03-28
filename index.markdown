@@ -19,23 +19,27 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The following terms are used throughout this specification:
 
-- **Mode line**: A special comment at the beginning of a file that specifies the file type or mode, following conventions used by text editors like Emacs or Vim.
+- **Insignificant Whitespace**: Any sequence of space characters, tabs or line endings that is not part of a string. It is generally ignored by parsers and is used to format JSONC documents for better readability.
+- **Line ending**: Refers to the sequence of (often invisible) control characters that indicate the end of a line. In JSONC, this sequence can be represented by a line feed (LF) or a carriage return followed by a line feed (CRLF). In terms of Unicode, LF corresponds to U+000A and CR corresponds to U+000D.
+- **Mode line**: A special comment at the beginning of a file that specifies the file type or mode, following conventions used by text editors like Emacs (or sometimes Vim).
 - **Parser**: A software component that reads and interprets JSONC documents.
-- **Trailing comma**: A comma that appears after the last element in an array or the last property in an object, before the closing bracket or brace.
+- **Trailing comma**: A comma that appears after the last element in an array or the last member in an object, before the closing bracket or brace.
 
 ## Syntax
 
-JSONC follows the same syntax rules as JSON with the addition of JavaScript style comments. Comments can be either single-line or multi-line.
+JSONC follows the same syntax rules as JSON with the addition of JavaScript style comments. Comments can be either single-line or multi-line. They can be placed anywhere insignificant whitespace is allowed in regular JSON.
+
+Comments provide context alongside the data, but they MUST NOT affect consumption. Removing all comments MUST yield the same data representation of the JSON values.
 
 ### Single-line Comments
 
-Single-line comments start with `//` and extend to the end of the line.
+Single-line comments start with `//` and continue until a line ending is encountered. 
 
 ```jsonc
 {
     // This is a single-line comment
     "name": "John Doe",
-    "age": 30
+    "age": 30 // This is another single line comment
 }
 ```
 
