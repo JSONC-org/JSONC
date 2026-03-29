@@ -151,6 +151,14 @@ The "JSON with Comments" mode in VS Code used to allow trailing commas without a
 
 At the time of writing this document, the "JSON with Comments" mode still accepts trailing commas, but it discourages their usage by displaying a warning ([source](https://code.visualstudio.com/docs/languages/json#_json-with-comments)) unless the file is one of the VS Code official configuration files. The exclusion of those configuration files comes from the JSON schema used. The schema for these files explicitly allow trailing commas, which is why they are accepted without warnings in that specific context.
 
+## Appendix B: Disambiguation of JSONC
+
+Some other extensions of JSON that allow comments exist in the wild and might allow alternative syntax. This section is here make those differences explicit.
+
+### Comments starting with `#`
+
+Single-line comments that start with `#` are not supported. JSONC must remain a subset of JavaScript syntax and JavaScript does not support `#` comments.
+
 ## References
 
 ### [RFC2119]
