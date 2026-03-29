@@ -45,16 +45,31 @@ Single-line comments start with `//` and continue until a line ending is encount
 
 ### Multi-line Comments
 
-Multi-line comments start with `/*` and end with `*/`. They can span multiple lines.
+Multi-line comments (sometimes called block comments) start with `/*` and end with `*/`. They can span multiple lines, but can also be used on a single line.
 
 ```jsonc
 {
     /*
-      This is a multi-line comment
+      This is a block comment
       that spans multiple lines
     */
     "name": "Jane Doe",
-    "age": 25
+    "age": /* This is a single-line block comment */ 25
+}
+```
+
+Multi-line comments cannot be nested. The closing of the nested comment will be interpreted as the end of the outer comment. For instance, the following is invalid JSONC:
+
+```jsonc
+
+{ 
+/* OUTER start
+  /* NESTED block comments are not supported.
+      OUTER block comment will end here --> */
+  OUTER end
+*/
+    "name": "John Doe",
+    "age": 30
 }
 ```
 
