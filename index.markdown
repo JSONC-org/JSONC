@@ -19,38 +19,57 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The following terms are used throughout this specification:
 
-- **Mode line**: A special comment at the beginning of a file that specifies the file type or mode, following conventions used by text editors like Emacs or Vim.
+- **Insignificant Whitespace**: Any sequence of space characters, tabs or line endings that is not part of a string. It is generally ignored by parsers and is used to format JSONC documents for better readability.
+- **Line ending**: Refers to the sequence of (often invisible) control characters that indicate the end of a line. In JSONC, this sequence can be represented by a line feed (LF) or a carriage return followed by a line feed (CRLF). In terms of Unicode, LF corresponds to U+000A and CR corresponds to U+000D.
+- **Mode line**: A special comment at the beginning of a file that specifies the file type or mode, following conventions used by text editors like Emacs (or sometimes Vim).
 - **Parser**: A software component that reads and interprets JSONC documents.
-- **Trailing comma**: A comma that appears after the last element in an array or the last property in an object, before the closing bracket or brace.
+- **Trailing comma**: A comma that appears after the last element in an array or the last member in an object, before the closing bracket or brace.
 
 ## Syntax
 
-JSONC follows the same syntax rules as JSON with the addition of JavaScript style comments. Comments can be either single-line or multi-line.
+JSONC follows the same syntax rules as JSON with the addition of JavaScript style comments. Comments can be either single-line or multi-line. They can be placed anywhere insignificant whitespace is allowed in regular JSON.
+
+Comments provide context alongside the data, but they MUST NOT affect consumption. Removing all comments MUST yield the same data representation of the JSON values.
 
 ### Single-line Comments
 
-Single-line comments start with `//` and extend to the end of the line.
+Single-line comments start with `//` and continue until a line ending is encountered. 
 
 ```jsonc
 {
     // This is a single-line comment
     "name": "John Doe",
-    "age": 30
+    "age": 30 // This is another single line comment
 }
 ```
 
 ### Multi-line Comments
 
-Multi-line comments start with `/*` and end with `*/`. They can span multiple lines.
+Multi-line comments (sometimes called block comments) start with `/*` and end with `*/`. They can span multiple lines, but can also be used on a single line.
 
 ```jsonc
 {
     /*
-      This is a multi-line comment
+      This is a block comment
       that spans multiple lines
     */
     "name": "Jane Doe",
-    "age": 25
+    "age": /* This is a single-line block comment */ 25
+}
+```
+
+Multi-line comments cannot be nested. The closing of the nested comment will be interpreted as the end of the outer comment. For instance, the following is invalid JSONC:
+
+```jsonc
+
+{ 
+/* OUTER start
+  /* NESTED block comments are not supported.
+      OUTER block comment will end here --> */
+  OUTER end
+*/
+    "name": "John Doe",
+    "age": 30
 }
 ```
 
@@ -131,6 +150,14 @@ Mandatory trailing commas support might be added to future versions of the jsonc
 The "JSON with Comments" mode in VS Code used to allow trailing commas without any warnings by default, but this was eventually changed ([source](https://github.com/microsoft/vscode/issues/102061)).
 
 At the time of writing this document, the "JSON with Comments" mode still accepts trailing commas, but it discourages their usage by displaying a warning ([source](https://code.visualstudio.com/docs/languages/json#_json-with-comments)) unless the file is one of the VS Code official configuration files. The exclusion of those configuration files comes from the JSON schema used. The schema for these files explicitly allow trailing commas, which is why they are accepted without warnings in that specific context.
+
+## Appendix B: Disambiguation of JSONC
+
+Some other extensions of JSON that allow comments exist in the wild and might allow alternative syntax. This section is here make those differences explicit.
+
+### Comments starting with `#`
+
+Single-line comments that start with `#` are not supported. JSONC must remain a subset of JavaScript syntax and JavaScript does not support `#` comments.
 
 ## References
 
