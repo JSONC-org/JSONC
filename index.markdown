@@ -106,9 +106,6 @@ Several tools and libraries support JSONC, enabling developers to parse and gene
 
 Here is a non-exhaustive list:
 
-**JavaScript/TypeScript**:
-- [microsoft/node-jsonc-parser](https://github.com/microsoft/node-jsonc-parser)
-
 **C++**
 - [stephenberry/glaze](https://github.com/stephenberry/glaze)
 
@@ -118,24 +115,26 @@ Here is a non-exhaustive list:
 **Go**
 - [tidwall/jsonc](https://github.com/tidwall/jsonc)
 
-**Python**
-- [n-takumasa/json-with-comments](https://github.com/n-takumasa/json-with-comments)
+**Java**
+- [Jackson](https://github.com/FasterXML/jackson-core) `JsonFactory.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)` 
+
+**JavaScript/TypeScript**:
+- [microsoft/node-jsonc-parser](https://github.com/microsoft/node-jsonc-parser)
+
+**Kotlin**
+- [kotlinx.serialization.json](https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-builder/allow-comments.html)
 
 **PHP**
 - [otar/jsonc](https://github.com/otar/jsonc)
+
+**Python**
+- [n-takumasa/json-with-comments](https://github.com/n-takumasa/json-with-comments)
 
 **Rust**
 - [dprint/jsonc-parser](https://github.com/dprint/jsonc-parser)
 
 **Swift**
 - [steelbrain/JSONCKit](https://github.com/steelbrain/JSONCKit)
-
-**Java**
-- [Jackson](https://github.com/FasterXML/jackson-core) `JsonFactory.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)` 
-
-**Kotlin**
-- [kotlinx.serialization.json](https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-builder/allow-comments.html)
-
 
 ## APPENDIX A: Trailing Commas and JSONC
 
