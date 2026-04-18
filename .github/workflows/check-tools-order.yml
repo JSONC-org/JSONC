@@ -1,0 +1,20 @@
+name: Check Tools Order
+
+on:
+  pull_request:
+
+jobs:
+  check-tools-order:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Validate tools and libraries order
+        run: node check-tools-order.js
