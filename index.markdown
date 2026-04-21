@@ -107,12 +107,15 @@ Several tools and libraries support JSONC, enabling developers to parse and gene
 Here is a non-exhaustive list:
 
 **C++**
+- [nlohmann/json](https://github.com/nlohmann/json) `ignore_comments`, `ignore_trailing_commas`
+- [RapidJSON](https://github.com/Tencent/rapidjson) `kParseCommentsFlag`, `kParseTrailingCommasFlag`
 - [stephenberry/glaze](https://github.com/stephenberry/glaze)
 
 **Elixir**
 - [massivefermion/jsonc](https://github.com/massivefermion/jsonc)
 
 **Go**
+- [HuJSON](https://github.com/tailscale/hujson)
 - [tidwall/jsonc](https://github.com/tidwall/jsonc)
 
 **Java**
