@@ -1,0 +1,108 @@
+; JSONC grammar with comments support (RFC 8259 extended with JavaScript-style comments)
+;
+; Notes:
+; - Rule names and structure follow RFC 8259 ABNF snippets.
+; - DIGIT and HEXDIG are core rules from RFC 5234.
+; - comments are an extension not in RFC 8259.
+; - Trailing commas are NOT supported in this grammar.
+
+; A JSONC-text is a serialized value surrounded by optional whitespace and comments.
+; Comments can appear anywhere insignificant whitespace is allowed in JSON.
+JSONC-text = wsc value wsc
+
+; Whitespace with Comments: zero or more whitespace characters or comments
+wsc = *(ws-char / comment)
+
+; Single whitespace character (space, tab, line feed, carriage return)
+ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
+
+; Comments: single-line or multi-line
+comment = single-line-comment / multi-line-comment
+
+; Source character: any Unicode code point, as per ECMAScript.
+source-character = %x00-10FFFF
+
+; Comment terminators and sequences (based on ECMAScript line terminators)
+comment-terminator = %x0A / %x0D / %x2028 / %x2029          ; LF / CR / LS / PS
+comment-terminator-sequence = %x0D.0A / %x0A / %x0D / %x2028 / %x2029 
+
+; Single-line comment: starts with //, continues until line ending
+; Terminator is not part of the comment body.
+; Note that the single-line-comment-end is optional, allowing comments to end at the end of the file without a line terminator.
+single-line-comment-start = %x2F.2F             ; // double solidus
+single-line-comment-end = comment-terminator-sequence
+single-line-comment = single-line-comment-start *single-line-comment-char [ single-line-comment-end ]
+single-line-comment-char = %x00-09 / %x0B-0C / %x0E-2027 / %x202A-10FFFF ; Any source character except comment terminators
+
+; Multi-line comment: /* ... */
+; Cannot be nested. The first */ closes the comment.
+; Any source character is allowed inside, including control characters,
+; except the closing delimiter sequence "*/".
+multi-line-comment-start = %x2F.2A             ; /* slash-asterisk
+multi-line-comment-end = %x2A.2F               ; */ asterisk-slash
+asterisk = %x2A                                ; * asterisk character
+multi-line-comment = multi-line-comment-start [ multi-line-comment-chars ] multi-line-comment-end
+multi-line-comment-chars = not-asterisk-char [ multi-line-comment-chars ] /
+                           asterisk [ post-asterisk-comment-chars ]
+post-asterisk-comment-chars = not-forward-slash-or-asterisk-char [ multi-line-comment-chars ] /
+                              asterisk [ post-asterisk-comment-chars ]
+not-asterisk-char = %x00-29 / %x2B-10FFFF
+not-forward-slash-or-asterisk-char = %x00-29 / %x2B-2E / %x30-10FFFF
+
+; Structural characters with surrounding optional whitespace and comments
+begin-array     = wsc %x5B wsc  ; [ left square bracket
+begin-object    = wsc %x7B wsc  ; { left curly bracket
+end-array       = wsc %x5D wsc  ; ] right square bracket
+end-object      = wsc %x7D wsc  ; } right curly bracket
+name-separator  = wsc %x3A wsc  ; : colon
+value-separator = wsc %x2C wsc  ; , comma
+
+; Any JSON value
+value = false / null / true / object / array / number / string
+
+; Literal names (boolean values and null)
+false = %x66.61.6C.73.65   ; false
+true  = %x74.72.75.65      ; true
+null  = %x6E.75.6C.6C      ; null
+
+; Objects
+object = begin-object [ member *( value-separator member ) ] end-object
+member = string name-separator value
+
+; Arrays
+array = begin-array [ value *( value-separator value ) ] end-array
+
+; Numbers
+number = [ minus ] int [ frac ] [ exp ]
+decimal-point = %x2E        ; .
+digit1-9 = %x31-39          ; 1-9
+e = %x65 / %x45             ; e E
+exp = e [ minus / plus ] 1*DIGIT
+frac = decimal-point 1*DIGIT
+int = zero / ( digit1-9 *DIGIT )
+minus = %x2D                ; -
+plus = %x2B                 ; +
+zero = %x30                 ; 0
+
+; Strings
+string = quotation-mark *char quotation-mark
+
+char = unescaped /
+ escape (
+ %x22 /             ; "    quotation mark  U+0022
+ %x5C /             ; \    reverse solidus U+005C
+ %x2F /             ; /    solidus         U+002F
+ %x62 /             ; b    backspace       U+0008
+ %x66 /             ; f    form feed       U+000C
+ %x6E /             ; n    line feed       U+000A
+ %x72 /             ; r    carriage return U+000D
+ %x74 /             ; t    tab             U+0009
+ %x75 4HEXDIG       ; uXXXX                U+XXXX
+ )
+
+escape = %x5C               ; \
+quotation-mark = %x22       ; "
+
+unescaped = %x20-21 / %x23-5B / %x5D-10FFFF       ; Any code point except quotation mark, reverse solidus or ASCII control chars 
+
+; End of JSONC grammar (RFC 8259 extended with JavaScript-style comments).
