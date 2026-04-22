@@ -81,7 +81,7 @@ JSONC parsers MAY support trailing commas. For more information regarding traili
 
 Comments in JSONC are ignored during parsing, allowing developers to annotate their JSON data without affecting its structure or content.
 
-## File extensions
+## Filename extension
 
 The recommended file extension for JSONC documents is `.jsonc`.
 
@@ -95,6 +95,14 @@ or
 ```jsonc
 // -*- jsonc -*-
 ```
+
+## Media type
+
+When transmitting JSONC over a network, senders SHOULD use the media type `application/jsonc`.
+
+Senders SHOULD NOT use `application/json` for JSONC content, because consumers that only implement JSON may interpret the payload incorrectly or reject it due to the presence of comments and/or trailing commas.
+
+Consumers that support JSONC SHOULD accept `application/jsonc`.
 
 ## Main Use Cases
 
