@@ -33,7 +33,7 @@ Comments provide context alongside the data, but they MUST NOT affect consumptio
 
 ### Single-line Comments
 
-Single-line comments start with `//` and continue until a line ending is encountered. 
+Single-line comments start with // and continue until a line ending, a line seperator (U+2028) or a paragraph seperator (U+2029) is encountered. U+2028 and U+2029 can only appear at the end of a line comment or inside a string literal.
 
 ```jsonc
 {
@@ -41,6 +41,7 @@ Single-line comments start with `//` and continue until a line ending is encount
     "name": "John Doe",
     "age": 30 // This is another single line comment
 }
+// This is another single-line comment at the end without new line
 ```
 
 ### Multi-line Comments
