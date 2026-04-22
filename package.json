@@ -1,0 +1,11 @@
+{
+  "name": "jsonc-railroad-tools",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "railroad": "node generate-railroad.js"
+  },
+  "dependencies": {
+    "railroad-diagram-generator-js": "file:./submodules/railroad-diagram-generator-js"
+  }
+}

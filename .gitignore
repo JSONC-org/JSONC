@@ -4,3 +4,6 @@ _site
 .jekyll-metadata
 vendor
 Gemfile.lock
+node_modules
+local
+grammar/jsonc-processed.abnf

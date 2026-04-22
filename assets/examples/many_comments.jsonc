@@ -1,0 +1,14 @@
+//Comment
+/*Comment*/
+/*Comment*/{//Comment
+
+/*Comment*/"key1" /*Comment*/:/*Comment*/"value1"/*Comment*/,/*Comment*/
+
+"key2" //Comment
+: //Comment
+"value2" //Comment
+, //Comment
+
+"array1": [/*Comment*/"value1"/*Comment*/,/*Comment*/"value2",/*Comment*/1/*Comment*/]
+
+}

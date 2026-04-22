@@ -1,0 +1,189 @@
+
+/* Railroad diagram styling for connections */
+:root {
+  /* Default sizing configuration */
+  --grid-size: 16px;
+  --font-size: 14px;
+  --track-width: 6px;
+  --text-border: 2px;
+  /* Text box corner radius factor */
+  --text-box-corner-radius-factor: 0.8;
+  /* Rule endpoint circle radius factor */
+  --rule-endpoint-radius-factor: 0.7;
+}
+
+.track {
+    fill: none; /* Prevent filling of the path */
+    stroke: #000;
+    stroke-width: var(--track-width);
+    stroke-linecap: butt; /* End exactly at coordinates, don't extend beyond */
+}
+
+/* Endpoint styling for start/end points */
+.start-endpoint,
+.end-endpoint {
+    fill: black;
+    stroke: none;
+}
+
+/* Endpoint circle styling */
+.endpoint {
+    r: calc(var(--grid-size) * var(--rule-endpoint-radius-factor));
+    fill: black;
+    stroke: none;
+}
+
+.highlight {
+    stroke: red;
+}
+
+/* Terminal and non-terminal text box styling */
+.textbox {
+    stroke-width: var(--text-border);
+    stroke: black;
+    rx: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
+    ry: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
+    fill: none;
+}
+
+.textbox.terminal {
+    fill: rgb(200, 200, 200);
+}
+
+.textbox.nonterminal {
+    fill: rgb(210, 210, 210);
+}
+
+.textbox-text {
+    font-family: Arial, sans-serif;
+    font-size: var(--font-size);
+    fill: black;
+    text-anchor: "middle";    
+    dominant-baseline: "middle";
+    alignment-baseline: "middle";
+}
+
+.textbox-text.nonterminal {
+    text-decoration: underline; /* Underline non-terminals */
+    cursor: pointer; /* Show it's clickable */
+    pointer-events: auto; /* Ensure text can receive click events */
+}
+
+.textbox-text.nonterminal:hover {
+    fill: #0066cc; /* Blue on hover */
+}
+
+/* CSS-based debug visualization using HTML overlays */
+.debug-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+.debug-box-overlay {
+    position: absolute !important;
+    border: 1px dotted hotpink !important;    
+    box-sizing: border-box !important;
+    pointer-events: none !important;
+}
+
+.debug-baseline-overlay {
+    position: absolute !important;
+    border-top: 1px dashed hotpink !important;
+    pointer-events: none !important;
+}
+
+/* Ensure container has relative positioning for debug overlay */
+.diagram-container {
+    position: relative;
+    margin-top: 1rem;
+}
+
+/* Fallback: Old SVG-based debug styles (in case CSS approach doesn't work) */
+.debug-box {
+    stroke: hotpink;    
+    stroke-width: 1px;
+    stroke-dasharray:6 4;
+    fill: none;
+}
+
+.debug-baseline {
+    stroke: hotpink;    
+    stroke-width: 1px;
+    stroke-dasharray: 1 1;
+    fill: none;
+}
+
+/* New syntax rule layout styles */
+.syntax-rule {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+    font-family:'Courier New', Courier, monospace
+}
+
+.syntax-rule h2 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+
+
+.error {
+    color: red;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: #ffe6e6;
+    border: 1px solid red;
+    border-radius: 4px;
+}
+
+/* Grid and bounding box styles - initially hidden */
+.grid-background,
+.bounding-box {
+    display: none;
+}
+
+/* Visible state for grid and bounding boxes */
+.grid-background.visible,
+.bounding-box.visible {
+    display: block !important;
+}
+
+/* Make grid transparent to mouse clicks so elements underneath can be clicked */
+.grid-background {
+    pointer-events: none;
+}
+
+/* Ensure bounding boxes are visible when shown */
+.bounding-box {
+    stroke: limegreen !important;
+    stroke-width: 0.5 !important;
+    fill: rgba(50, 205, 50, 0.1) !important; /* 90% transparent lime green background */
+    opacity: 0.9 !important;
+}
+
+/* Make nonterminal textboxes clickable */
+.textbox.nonterminal {
+    cursor: pointer;
+}
+
+.textbox.nonterminal:hover {
+    fill: rgb(190, 190, 190);
+    stroke-width: calc(var(--text-border) * 1.5);
+}
+
+/* Footer styling */
+.generator-footer {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+    color: #666;
+}
