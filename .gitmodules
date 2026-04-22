@@ -1,0 +1,4 @@
+[submodule "submodules/railroad-diagram-generator-js"]
+	path = submodules/railroad-diagram-generator-js
+	url = https://github.com/DecimalTurn/railroad-diagram-generator-js
+	branch = dev
