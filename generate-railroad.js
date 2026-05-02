@@ -23,6 +23,15 @@ const INLINE_HEX_RULES = [
   "zero",
 ];
 
+// Inline selected rule references as quoted literals in specific target rules.
+// Add more mappings here to reuse this transformation pattern.
+const INLINE_LITERAL_REFS = [
+  {
+    targetRule: "value",
+    referencedRules: ["false", "true", "null"],
+  },
+];
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -39,6 +48,20 @@ function decodeAbnfHexSequence(value) {
     .map((part) => parseInt(part, 16));
 
   return String.fromCodePoint(...bytes);
+}
+
+function getHexRuleLiteral(source, ruleName) {
+  const escapedRuleName = escapeRegExp(ruleName);
+  const ruleRegex = new RegExp(
+    `^\\s*${escapedRuleName}\\s*=\\s*(%x[0-9A-Fa-f]+(?:\\.[0-9A-Fa-f]+)*)\\b.*$`,
+    "m",
+  );
+  const ruleMatch = source.match(ruleRegex);
+  if (!ruleMatch) {
+    throw new Error(`Rule ${ruleName} was not found.`);
+  }
+
+  return decodeAbnfHexSequence(ruleMatch[1]);
 }
 
 function inlineHexRuleAsLiteral(source, ruleName) {
@@ -95,11 +118,56 @@ function inlineHexRuleAsLiteral(source, ruleName) {
     .join("\n");
 }
 
+function inlineLiteralRefsInTargetRule(source, targetRule, referencedRules) {
+  const escapedTargetRule = escapeRegExp(targetRule);
+  const targetRuleRegex = new RegExp(`^(\\s*${escapedTargetRule}\\s*=\\s*)(.*)$`, "m");
+  const match = source.match(targetRuleRegex);
+  if (!match) {
+    throw new Error(`Rule ${targetRule} was not found.`);
+  }
+
+  const targetRulePrefix = match[1];
+  const targetRuleRhs = match[2];
+
+  let updatedRhs = targetRuleRhs;
+  for (const referencedRule of referencedRules) {
+    const literalValue = getHexRuleLiteral(source, referencedRule);
+    const replacementLiteral = `"${literalValue.replace(/"/g, '\\"')}"`;
+    const referencedRuleRegex = new RegExp(
+      `(?<![A-Za-z0-9-])${escapeRegExp(referencedRule)}(?![A-Za-z0-9-])`,
+      "g",
+    );
+    updatedRhs = updatedRhs.replace(referencedRuleRegex, replacementLiteral);
+  }
+
+  return source.replace(targetRuleRegex, `${targetRulePrefix}${updatedRhs}`);
+}
+
+function removeRuleDefinitions(source, ruleNames) {
+  const removalSet = new Set(ruleNames);
+
+  return source
+    .split(/\r?\n/)
+    .filter((line) => {
+      const match = line.match(/^\s*([A-Za-z][A-Za-z0-9-]*)\s*=/);
+      if (!match) {
+        return true;
+      }
+      return !removalSet.has(match[1]);
+    })
+    .join("\n");
+}
+
 function processAbnfSource(source) {
   let processed = source;
 
   for (const ruleName of INLINE_HEX_RULES) {
     processed = inlineHexRuleAsLiteral(processed, ruleName);
+  }
+
+  for (const { targetRule, referencedRules } of INLINE_LITERAL_REFS) {
+    processed = inlineLiteralRefsInTargetRule(processed, targetRule, referencedRules);
+    processed = removeRuleDefinitions(processed, referencedRules);
   }
 
   return processed;
