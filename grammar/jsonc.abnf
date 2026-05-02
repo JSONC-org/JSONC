@@ -23,8 +23,8 @@ comment = single-line-comment / multi-line-comment
 source-character = %x00-10FFFF
 
 ; Comment terminators and sequences (based on ECMAScript line terminators)
-comment-terminator = %x0A / %x0D / %x2028 / %x2029          ; LF / CR / LS / PS
-comment-terminator-sequence = %x0D.0A / %x0A / %x0D / %x2028 / %x2029 
+comment-terminator = %x0A / %x0D                ; LF / CR
+comment-terminator-sequence = %x0D.0A / %x0A / %x0D
 
 ; Single-line comment: starts with //, continues until line ending
 ; Terminator is not part of the comment body.
@@ -32,7 +32,7 @@ comment-terminator-sequence = %x0D.0A / %x0A / %x0D / %x2028 / %x2029
 single-line-comment-start = %x2F.2F             ; // double solidus
 single-line-comment-end = comment-terminator-sequence
 single-line-comment = single-line-comment-start *single-line-comment-char [ single-line-comment-end ]
-single-line-comment-char = %x00-09 / %x0B-0C / %x0E-2027 / %x202A-10FFFF ; Any source character except comment terminators
+single-line-comment-char = %x00-09 / %x0B-0C / %x0E-10FFFF ; Any source character except comment terminators
 
 ; Multi-line comment: /* ... */
 ; Cannot be nested. The first */ closes the comment.
