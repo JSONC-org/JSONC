@@ -41,17 +41,19 @@
 .textbox {
     stroke-width: var(--text-border);
     stroke: black;
-    rx: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
-    ry: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
+    rx: 0;
+    ry: 0;
     fill: none;
 }
 
 .textbox.terminal {
-    fill: rgb(200, 200, 200);
+    fill: rgb(205, 240, 205);
+    rx: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
+    ry: calc(var(--grid-size) * var(--text-box-corner-radius-factor));
 }
 
 .textbox.nonterminal {
-    fill: rgb(210, 210, 210);
+    fill: rgb(205, 240, 205);
 }
 
 .textbox-text {
@@ -64,6 +66,7 @@
 }
 
 .textbox-text.nonterminal {
+    font-weight: 700;
     text-decoration: underline; /* Underline non-terminals */
     cursor: pointer; /* Show it's clickable */
     pointer-events: auto; /* Ensure text can receive click events */
@@ -176,7 +179,7 @@
 }
 
 .textbox.nonterminal:hover {
-    fill: rgb(190, 190, 190);
+    fill: rgb(190, 230, 190);
     stroke-width: calc(var(--text-border) * 1.5);
 }
 
