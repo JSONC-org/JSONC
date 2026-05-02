@@ -15,7 +15,12 @@ const INLINE_HEX_RULES = [
   "multi-line-comment-start",
   "multi-line-comment-end",
   "asterisk",
-  "escape"
+  "escape",
+  "single-line-comment-start",
+  "decimal-point",
+  "minus",
+  "plus",
+  "zero",
 ];
 
 function escapeRegExp(value) {
