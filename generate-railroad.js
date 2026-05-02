@@ -17,6 +17,7 @@ const INLINE_HEX_RULES = [
   "asterisk",
   "escape",
   "single-line-comment-start",
+  "quotation-mark",
   "decimal-point",
   "minus",
   "plus",
@@ -78,10 +79,10 @@ function inlineHexRuleAsLiteral(source, ruleName) {
   const hexSequence = ruleMatch[1];
   const literalChars = decodeAbnfHexSequence(hexSequence);
 
-  // For backslash or other problematic characters, keep them as hex format
-  // ABNF doesn't support backslash escaping in quoted strings
+  // Keep hex format for characters that cannot be represented safely
+  // as a single ABNF quoted string literal.
   let replacement;
-  if (literalChars === "\\") {
+  if (literalChars === "\\" || literalChars === '"') {
     replacement = hexSequence;
   } else {
     // For other characters, escape only double quotes (not backslashes)
