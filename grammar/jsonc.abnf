@@ -1,9 +1,8 @@
 ; JSONC grammar with comments support (RFC 8259 extended with JavaScript-style comments)
 ;
 ; Notes:
-; - Rule names and structure follow RFC 8259 ABNF snippets.
-; - DIGIT and HEXDIG are core rules from RFC 5234.
-; - comments are an extension not in RFC 8259.
+; - Rule names and structure follow RFC 8259 ABNF.
+; - Comments are an extension not in RFC 8259.
 ; - Trailing commas are NOT supported in this grammar.
 
 ; A JSONC-text is a serialized value surrounded by optional whitespace and comments.
@@ -75,14 +74,23 @@ array = begin-array [ value *( value-separator value ) ] end-array
 ; Numbers
 number = [ minus ] int [ frac ] [ exp ]
 decimal-point = %x2E        ; .
+digit0-9 = %x30-39          ; 0-9
 digit1-9 = %x31-39          ; 1-9
+
 e = %x65 / %x45             ; e E
-exp = e [ minus / plus ] 1*DIGIT
-frac = decimal-point 1*DIGIT
-int = zero / ( digit1-9 *DIGIT )
+exp = e [ minus / plus ] 1*digit0-9
+frac = decimal-point 1*digit0-9
+int = zero / ( digit1-9 *digit0-9 )
 minus = %x2D                ; -
 plus = %x2B                 ; +
 zero = %x30                 ; 0
+hexdigit = digit0-9 / 
+  %x41 /                    ; A
+  %x42 /                    ; B
+  %x43 /                    ; C
+  %x44 /                    ; D
+  %x45 /                    ; E
+  %x46                      ; F
 
 ; Strings
 string = quotation-mark *char quotation-mark
@@ -97,7 +105,7 @@ char = unescaped /
  %x6E /             ; n    line feed       U+000A
  %x72 /             ; r    carriage return U+000D
  %x74 /             ; t    tab             U+0009
- %x75 4HEXDIG       ; uXXXX                U+XXXX
+ %x75 4hexdigit    ; uXXXX                U+XXXX
  )
 
 escape = %x5C               ; \
