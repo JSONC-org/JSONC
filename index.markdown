@@ -109,6 +109,16 @@ Consumers that support JSONC SHOULD accept `application/jsonc`.
 - Configuration Files: JSONC is useful for configuration files where comments can provide explanations or instructions.
 - Data Annotation: JSONC allows developers to annotate JSON data with comments for better understanding and maintenance.
 
+## Formal grammar
+
+The formal grammar of JSONC is available here:
+
+- [JSONC ABNF Grammar]({{ '/grammar/JSONC.abnf' | relative_url }})
+
+For a visual representation of the grammar rules, see the JSONC railroad diagram page:
+
+- [JSONC Railroad Diagram]({{ '/grammar/railroad-diagram.html' | relative_url }})
+
 ## Tools and Libraries
 Several tools and libraries support JSONC, enabling developers to parse and generate JSONC data easily.
 
