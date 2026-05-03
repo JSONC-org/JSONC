@@ -10,7 +10,7 @@
 JSONC-text = wsc value wsc
 
 ; Whitespace with Comments: zero or more whitespace characters or comments
-wsc = *(ws-char / comment)   ; White space and comments
+wsc = *(ws-char / comment)   ; Whitespace and/or comments
 
 ; Single whitespace character (space, tab, line feed, carriage return)
 ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
