@@ -73,12 +73,12 @@ minus = %x2D                ; -
 plus = %x2B                 ; +
 zero = %x30                 ; 0
 hexdigit = digit / 
-  %x41 /                    ; A
-  %x42 /                    ; B
-  %x43 /                    ; C
-  %x44 /                    ; D
-  %x45 /                    ; E
-  %x46                      ; F
+  %x41 / %x61 /             ; A a
+  %x42 / %x62 /             ; B b
+  %x43 / %x63 /             ; C c
+  %x44 / %x64 /             ; D d
+  %x45 / %x65 /             ; E e
+  %x46 / %x66               ; F f
 four-hexdigits = 4hexdigit
 
 ; Strings
