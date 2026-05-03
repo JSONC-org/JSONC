@@ -5,7 +5,7 @@ const { spawnSync } = require("node:child_process");
 const path = require("node:path");
 
 // Customization section
-const DEFAULT_INPUT_ABNF = "grammar/jsonc.abnf";
+const DEFAULT_INPUT_ABNF = "grammar/JSONC.abnf";
 const DEFAULT_PROCESSED_ABNF = "grammar/jsonc-processed.abnf";
 const DEFAULT_OUTPUT_HTML = "grammar/railroad-diagram.html";
 
