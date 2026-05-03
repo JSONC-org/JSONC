@@ -57,7 +57,7 @@ name-separator  = wsc %x3A wsc  ; : colon
 value-separator = wsc %x2C wsc  ; , comma
 
 ; Any JSON value
-value = false / null / true / object / array / number / string
+value = object / array / number / string / true / false / null
 
 ; Literal names (boolean values and null)
 false = %x66.61.6C.73.65   ; false
@@ -74,38 +74,39 @@ array = begin-array [ value *( value-separator value ) ] end-array
 ; Numbers
 number = [ minus ] int [ frac ] [ exp ]
 decimal-point = %x2E        ; .
-digit0-9 = %x30-39          ; 0-9
+digit = %x30-39          ; 0-9
 digit1-9 = %x31-39          ; 1-9
 
 e = %x65 / %x45             ; e E
-exp = e [ minus / plus ] 1*digit0-9
-frac = decimal-point 1*digit0-9
-int = zero / ( digit1-9 *digit0-9 )
+exp = e [ minus / plus ] 1*digit
+frac = decimal-point 1*digit
+int = zero / ( digit1-9 *digit )
 minus = %x2D                ; -
 plus = %x2B                 ; +
 zero = %x30                 ; 0
-hexdigit = digit0-9 / 
+hexdigit = digit / 
   %x41 /                    ; A
   %x42 /                    ; B
   %x43 /                    ; C
   %x44 /                    ; D
   %x45 /                    ; E
   %x46                      ; F
+four-hexdigits = 4hexdigit
 
 ; Strings
 string = quotation-mark *char quotation-mark
 
 char = unescaped /
  escape (
- %x22 /             ; "    quotation mark  U+0022
- %x5C /             ; \    reverse solidus U+005C
- %x2F /             ; /    solidus         U+002F
- %x62 /             ; b    backspace       U+0008
- %x66 /             ; f    form feed       U+000C
- %x6E /             ; n    line feed       U+000A
- %x72 /             ; r    carriage return U+000D
- %x74 /             ; t    tab             U+0009
- %x75 4hexdigit    ; uXXXX                U+XXXX
+ %x22 /              ; "    quotation mark  U+0022
+ %x5C /              ; \    reverse solidus U+005C
+ %x2F /              ; /    solidus         U+002F
+ %x62 /              ; b    backspace       U+0008
+ %x66 /              ; f    form feed       U+000C
+ %x6E /              ; n    line feed       U+000A
+ %x72 /              ; r    carriage return U+000D
+ %x74 /              ; t    tab             U+0009
+ %x75 four-hexdigits ; uXXXX                U+XXXX
  )
 
 escape = %x5C               ; \

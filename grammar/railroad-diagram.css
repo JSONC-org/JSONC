@@ -76,6 +76,12 @@
     fill: #0066cc; /* Blue on hover */
 }
 
+.terminal-label {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    fill: #555;
+}
+
 /* CSS-based debug visualization using HTML overlays */
 .debug-overlay {
     position: absolute !important;
