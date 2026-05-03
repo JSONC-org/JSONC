@@ -10,7 +10,7 @@
 JSONC-text = wsc value wsc
 
 ; Whitespace with Comments: zero or more whitespace characters or comments
-wsc = *(ws-char / comment)
+wsc = *(ws-char / comment)   ; White space and comments
 
 ; Single whitespace character (space, tab, line feed, carriage return)
 ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
@@ -18,20 +18,12 @@ ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
 ; Comments: single-line or multi-line
 comment = single-line-comment / multi-line-comment
 
-; Source character: any Unicode code point, as per ECMAScript.
-source-character = %x00-10FFFF
-
-; Comment terminators and sequences (based on ECMAScript line terminators)
-comment-terminator = %x0A / %x0D                ; LF / CR
-comment-terminator-sequence = %x0D.0A / %x0A / %x0D
-
 ; Single-line comment: starts with //, continues until line ending
-; Terminator is not part of the comment body.
 ; Note that the single-line-comment-end is optional, allowing comments to end at the end of the file without a line terminator.
 single-line-comment-start = %x2F.2F             ; // double solidus
-single-line-comment-end = comment-terminator-sequence
+single-line-comment-end = %x0D.0A / %x0A / %x0D
 single-line-comment = single-line-comment-start *single-line-comment-char [ single-line-comment-end ]
-single-line-comment-char = %x00-09 / %x0B-0C / %x0E-10FFFF ; Any source character except comment terminators
+single-line-comment-char = %x00-09 / %x0B-0C / %x0E-10FFFF ; Any source character except CR and LF (line terminator)
 
 ; Multi-line comment: /* ... */
 ; Cannot be nested. The first */ closes the comment.
