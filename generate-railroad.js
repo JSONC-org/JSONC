@@ -8,6 +8,7 @@ const path = require("node:path");
 const DEFAULT_INPUT_ABNF = "grammar/JSONC.abnf";
 const DEFAULT_PROCESSED_ABNF = "grammar/jsonc-processed.abnf";
 const DEFAULT_OUTPUT_HTML = "grammar/railroad-diagram.html";
+const FORCED_HTML_HEADER = "JSONC GRAMMAR";
 
 // Rules to inline from their %x... definitions as literal ABNF strings.
 // Add more rule names here to apply the same transformation.
@@ -254,6 +255,15 @@ function processAbnfSource(source) {
   return processed;
 }
 
+function postProcessGeneratedHtml(htmlPath) {
+  const html = fs.readFileSync(htmlPath, "utf8");
+  const updated = html.replace(/<h1>[^<]*<\/h1>/, `<h1>${FORCED_HTML_HEADER}</h1>`);
+
+  if (updated !== html) {
+    fs.writeFileSync(htmlPath, updated, "utf8");
+  }
+}
+
 const args = process.argv.slice(2);
 const titleIndex = args.indexOf("--title");
 
@@ -327,4 +337,15 @@ if (result.error) {
   process.exit(1);
 }
 
-process.exit(result.status === null ? 1 : result.status);
+if (result.status !== 0) {
+  process.exit(result.status === null ? 1 : result.status);
+}
+
+try {
+  postProcessGeneratedHtml(outputPath);
+} catch (error) {
+  console.error(`Failed to post-process generated HTML: ${error.message}`);
+  process.exit(1);
+}
+
+process.exit(0);
