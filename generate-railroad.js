@@ -33,6 +33,51 @@ const INLINE_LITERAL_REFS = [
   },
 ];
 
+// Move selected rule definitions after another rule in the processed ABNF.
+// Add more entries here to control rule ordering in generated output.
+const REPOSITION_RULES_AFTER = [
+  {
+    ruleName: "begin-array",
+    afterRule: "array",
+  },
+  {
+    ruleName: "end-array",
+    afterRule: "begin-array",
+  },
+  {
+    ruleName: "begin-object",
+    afterRule: "object",
+  },
+  {
+    ruleName: "end-object",
+    afterRule: "begin-object",
+  },
+  {
+    ruleName: "name-separator",
+    afterRule: "member",
+  },
+  {
+    ruleName: "value-separator",
+    afterRule: "value",
+  },
+  {
+    ruleName: "digit",
+    afterRule: "unescaped",
+  },
+  {
+    ruleName: "digit1-9",
+    afterRule: "digit",
+  },
+  {
+    ruleName: "hexdigit",
+    afterRule: "digit1-9",
+  },
+  {
+    ruleName: "four-hexdigits",
+    afterRule: "hexdigit",
+  }
+];
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -159,6 +204,39 @@ function removeRuleDefinitions(source, ruleNames) {
     .join("\n");
 }
 
+function findRuleBlock(lines, ruleName) {
+  const ruleStartRegex = new RegExp(`^\\s*${escapeRegExp(ruleName)}\\s*=`);
+  const startIndex = lines.findIndex((line) => ruleStartRegex.test(line));
+  if (startIndex === -1) {
+    throw new Error(`Rule ${ruleName} was not found.`);
+  }
+
+  let endIndex = startIndex + 1;
+  while (endIndex < lines.length && /^\s/.test(lines[endIndex])) {
+    endIndex += 1;
+  }
+
+  return {
+    startIndex,
+    endIndex,
+    blockLines: lines.slice(startIndex, endIndex),
+  };
+}
+
+function repositionRulesAfter(source, reorderings) {
+  let lines = source.split(/\r?\n/);
+
+  for (const { ruleName, afterRule } of reorderings) {
+    const ruleBlock = findRuleBlock(lines, ruleName);
+    lines.splice(ruleBlock.startIndex, ruleBlock.endIndex - ruleBlock.startIndex);
+
+    const afterRuleBlock = findRuleBlock(lines, afterRule);
+    lines.splice(afterRuleBlock.endIndex, 0, ...ruleBlock.blockLines);
+  }
+
+  return lines.join("\n");
+}
+
 function processAbnfSource(source) {
   let processed = source;
 
@@ -170,6 +248,8 @@ function processAbnfSource(source) {
     processed = inlineLiteralRefsInTargetRule(processed, targetRule, referencedRules);
     processed = removeRuleDefinitions(processed, referencedRules);
   }
+
+  processed = repositionRulesAfter(processed, REPOSITION_RULES_AFTER);
 
   return processed;
 }
