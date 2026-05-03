@@ -64,15 +64,11 @@ member = string name-separator value
 array = begin-array [ value *( value-separator value ) ] end-array
 
 ; Numbers
-number = [ minus ] int [ frac ] [ exp ]
+number = [ minus ] ( zero / ( digit1-9 *digit ) ) [ decimal-point 1*digit ] [ ( %x65 / %x45 ) [ minus / plus ] 1*digit ]
 decimal-point = %x2E        ; .
 digit = %x30-39          ; 0-9
 digit1-9 = %x31-39          ; 1-9
 
-e = %x65 / %x45             ; e E
-exp = e [ minus / plus ] 1*digit
-frac = decimal-point 1*digit
-int = zero / ( digit1-9 *digit )
 minus = %x2D                ; -
 plus = %x2B                 ; +
 zero = %x30                 ; 0
