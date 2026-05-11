@@ -16,7 +16,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 244px 1fr;
   column-gap: 1.5rem;
   align-items: center;
   min-height: 130px;
@@ -99,7 +99,7 @@ body {
 }
 
 .toc-sidebar {
-  flex: 0 0 220px;
+  flex: 0 0 244px;
   position: sticky;
   top: 1.5rem;
   max-height: calc(100vh - 3rem);
