@@ -113,7 +113,7 @@ Consumers that support JSONC SHOULD accept `application/jsonc`.
 
 The formal grammar of JSONC is available here:
 
-- [JSONC ABNF Grammar]({{ '/grammar/JSONC.abnf' | relative_url }})
+- [JSONC ABNF Grammar](https://github.com/JSONC-org/JSONC/blob/main/grammar/JSONC.abnf)
 
 For a visual representation of the grammar rules, see the JSONC railroad diagram page:
 
