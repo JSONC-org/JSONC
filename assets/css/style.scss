@@ -3,6 +3,10 @@
 
 @import 'jekyll-theme-cayman';
 
+body {
+  font-family: Arial, sans-serif;
+}
+
 .page-header {
   position: relative;
   padding: 1rem 1rem 0.9rem;
@@ -101,7 +105,7 @@
   max-height: calc(100vh - 3rem);
   overflow-y: auto;
   padding: 1rem 1rem 1rem 1.5rem;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   line-height: 1.5;
   border-right: 1px solid #e0e0e0;
   scrollbar-width: thin;
@@ -114,7 +118,7 @@
 .toc-title {
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   letter-spacing: 0.08em;
   color: #555;
   margin: 0 0 0.6rem 0;
@@ -153,7 +157,7 @@
 
 .toc-h3 {
   padding-left: 0.8rem;
-  font-size: 0.78rem;
+  font-size: 0.88rem;
 }
 
 .main-content {
