@@ -1,9 +1,8 @@
 ; JSONC grammar with comments support (RFC 8259 extended with JavaScript-style comments)
 ;
 ; Notes:
-; - Rule names and structure follow RFC 8259 ABNF snippets.
-; - DIGIT and HEXDIG are core rules from RFC 5234.
-; - comments are an extension not in RFC 8259.
+; - Rule names and structure follow RFC 8259 ABNF.
+; - Comments are an extension not in RFC 8259.
 ; - Trailing commas are NOT supported in this grammar.
 
 ; A JSONC-text is a serialized value surrounded by optional whitespace and comments.
@@ -11,7 +10,7 @@
 JSONC-text = wsc value wsc
 
 ; Whitespace with Comments: zero or more whitespace characters or comments
-wsc = *(ws-char / comment)
+wsc = *(ws-char / comment)   ; Whitespace and/or comments
 
 ; Single whitespace character (space, tab, line feed, carriage return)
 ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
@@ -19,20 +18,12 @@ ws-char = %x20 / %x09 / %x0A / %x0D  ; space / tab / LF / CR
 ; Comments: single-line or multi-line
 comment = single-line-comment / multi-line-comment
 
-; Source character: any Unicode code point, as per ECMAScript.
-source-character = %x00-10FFFF
-
-; Comment terminators and sequences (based on ECMAScript line terminators)
-comment-terminator = %x0A / %x0D / %x2028 / %x2029          ; LF / CR / LS / PS
-comment-terminator-sequence = %x0D.0A / %x0A / %x0D / %x2028 / %x2029 
-
 ; Single-line comment: starts with //, continues until line ending
-; Terminator is not part of the comment body.
 ; Note that the single-line-comment-end is optional, allowing comments to end at the end of the file without a line terminator.
 single-line-comment-start = %x2F.2F             ; // double solidus
-single-line-comment-end = comment-terminator-sequence
+single-line-comment-end = %x0D.0A / %x0A / %x0D
 single-line-comment = single-line-comment-start *single-line-comment-char [ single-line-comment-end ]
-single-line-comment-char = %x00-09 / %x0B-0C / %x0E-2027 / %x202A-10FFFF ; Any source character except comment terminators
+single-line-comment-char = %x00-09 / %x0B-0C / %x0E-10FFFF ; Any source character except CR and LF (line terminator)
 
 ; Multi-line comment: /* ... */
 ; Cannot be nested. The first */ closes the comment.
@@ -58,7 +49,7 @@ name-separator  = wsc %x3A wsc  ; : colon
 value-separator = wsc %x2C wsc  ; , comma
 
 ; Any JSON value
-value = false / null / true / object / array / number / string
+value = object / array / number / string / true / false / null
 
 ; Literal names (boolean values and null)
 false = %x66.61.6C.73.65   ; false
@@ -73,31 +64,37 @@ member = string name-separator value
 array = begin-array [ value *( value-separator value ) ] end-array
 
 ; Numbers
-number = [ minus ] int [ frac ] [ exp ]
+number = [ minus ] ( zero / ( digit1-9 *digit ) ) [ decimal-point 1*digit ] [ ( %x65 / %x45 ) [ minus / plus ] 1*digit ]
 decimal-point = %x2E        ; .
+digit = %x30-39          ; 0-9
 digit1-9 = %x31-39          ; 1-9
-e = %x65 / %x45             ; e E
-exp = e [ minus / plus ] 1*DIGIT
-frac = decimal-point 1*DIGIT
-int = zero / ( digit1-9 *DIGIT )
+
 minus = %x2D                ; -
 plus = %x2B                 ; +
 zero = %x30                 ; 0
+hexdigit = digit / 
+  %x41 / %x61 /             ; A a
+  %x42 / %x62 /             ; B b
+  %x43 / %x63 /             ; C c
+  %x44 / %x64 /             ; D d
+  %x45 / %x65 /             ; E e
+  %x46 / %x66               ; F f
+four-hexdigits = 4hexdigit
 
 ; Strings
 string = quotation-mark *char quotation-mark
 
 char = unescaped /
  escape (
- %x22 /             ; "    quotation mark  U+0022
- %x5C /             ; \    reverse solidus U+005C
- %x2F /             ; /    solidus         U+002F
- %x62 /             ; b    backspace       U+0008
- %x66 /             ; f    form feed       U+000C
- %x6E /             ; n    line feed       U+000A
- %x72 /             ; r    carriage return U+000D
- %x74 /             ; t    tab             U+0009
- %x75 4HEXDIG       ; uXXXX                U+XXXX
+ %x22 /              ; "    quotation mark  U+0022
+ %x5C /              ; \    reverse solidus U+005C
+ %x2F /              ; /    solidus         U+002F
+ %x62 /              ; b    backspace       U+0008
+ %x66 /              ; f    form feed       U+000C
+ %x6E /              ; n    line feed       U+000A
+ %x72 /              ; r    carriage return U+000D
+ %x74 /              ; t    tab             U+0009
+ %x75 four-hexdigits ; uXXXX                U+XXXX
  )
 
 escape = %x5C               ; \

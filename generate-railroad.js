@@ -5,9 +5,10 @@ const { spawnSync } = require("node:child_process");
 const path = require("node:path");
 
 // Customization section
-const DEFAULT_INPUT_ABNF = "grammar/jsonc.abnf";
+const DEFAULT_INPUT_ABNF = "grammar/JSONC.abnf";
 const DEFAULT_PROCESSED_ABNF = "grammar/jsonc-processed.abnf";
 const DEFAULT_OUTPUT_HTML = "grammar/railroad-diagram.html";
+const FORCED_HTML_HEADER = "JSONC GRAMMAR";
 
 // Rules to inline from their %x... definitions as literal ABNF strings.
 // Add more rule names here to apply the same transformation.
@@ -15,7 +16,67 @@ const INLINE_HEX_RULES = [
   "multi-line-comment-start",
   "multi-line-comment-end",
   "asterisk",
-  "escape"
+  "escape",
+  "single-line-comment-start",
+  "quotation-mark",
+  "decimal-point",
+  "minus",
+  "plus",
+  "zero",
+];
+
+// Inline selected rule references as quoted literals in specific target rules.
+// Add more mappings here to reuse this transformation pattern.
+const INLINE_LITERAL_REFS = [
+  {
+    targetRule: "value",
+    referencedRules: ["false", "true", "null"],
+  },
+];
+
+// Move selected rule definitions after another rule in the processed ABNF.
+// Add more entries here to control rule ordering in generated output.
+const REPOSITION_RULES_AFTER = [
+  {
+    ruleName: "begin-array",
+    afterRule: "array",
+  },
+  {
+    ruleName: "end-array",
+    afterRule: "begin-array",
+  },
+  {
+    ruleName: "begin-object",
+    afterRule: "object",
+  },
+  {
+    ruleName: "end-object",
+    afterRule: "begin-object",
+  },
+  {
+    ruleName: "name-separator",
+    afterRule: "member",
+  },
+  {
+    ruleName: "value-separator",
+    afterRule: "value",
+  },
+  {
+    ruleName: "digit",
+    afterRule: "unescaped",
+  },
+  {
+    ruleName: "digit1-9",
+    afterRule: "digit",
+  },
+  {
+    ruleName: "hexdigit",
+    afterRule: "digit1-9",
+  },
+  {
+    ruleName: "four-hexdigits",
+    afterRule: "hexdigit",
+  }
 ];
 
 function escapeRegExp(value) {
@@ -36,6 +97,24 @@ function decodeAbnfHexSequence(value) {
   return String.fromCodePoint(...bytes);
 }
 
+function getHexRuleSequence(source, ruleName) {
+  const escapedRuleName = escapeRegExp(ruleName);
+  const ruleRegex = new RegExp(
+    `^\\s*${escapedRuleName}\\s*=\\s*(%x[0-9A-Fa-f]+(?:\\.[0-9A-Fa-f]+)*)\\b.*$`,
+    "m",
+  );
+  const ruleMatch = source.match(ruleRegex);
+  if (!ruleMatch) {
+    throw new Error(`Rule ${ruleName} was not found.`);
+  }
+
+  return ruleMatch[1];
+}
+
+function getHexRuleLiteral(source, ruleName) {
+  return decodeAbnfHexSequence(getHexRuleSequence(source, ruleName));
+}
+
 function inlineHexRuleAsLiteral(source, ruleName) {
   const escapedRuleName = escapeRegExp(ruleName);
   const ruleRegex = new RegExp(
@@ -50,10 +129,10 @@ function inlineHexRuleAsLiteral(source, ruleName) {
   const hexSequence = ruleMatch[1];
   const literalChars = decodeAbnfHexSequence(hexSequence);
 
-  // For backslash or other problematic characters, keep them as hex format
-  // ABNF doesn't support backslash escaping in quoted strings
+  // Keep hex format for characters that cannot be represented safely
+  // as a single ABNF quoted string literal.
   let replacement;
-  if (literalChars === "\\") {
+  if (literalChars === "\\" || literalChars === '"') {
     replacement = hexSequence;
   } else {
     // For other characters, escape only double quotes (not backslashes)
@@ -90,6 +169,78 @@ function inlineHexRuleAsLiteral(source, ruleName) {
     .join("\n");
 }
 
+function inlineLiteralRefsInTargetRule(source, targetRule, referencedRules) {
+  const escapedTargetRule = escapeRegExp(targetRule);
+  const targetRuleRegex = new RegExp(`^(\\s*${escapedTargetRule}\\s*=\\s*)(.*)$`, "m");
+  const match = source.match(targetRuleRegex);
+  if (!match) {
+    throw new Error(`Rule ${targetRule} was not found.`);
+  }
+
+  const targetRulePrefix = match[1];
+  const targetRuleRhs = match[2];
+
+  let updatedRhs = targetRuleRhs;
+  for (const referencedRule of referencedRules) {
+    const replacementLiteral = getHexRuleSequence(source, referencedRule);
+    const referencedRuleRegex = new RegExp(
+      `(?<![A-Za-z0-9-])${escapeRegExp(referencedRule)}(?![A-Za-z0-9-])`,
+      "g",
+    );
+    updatedRhs = updatedRhs.replace(referencedRuleRegex, replacementLiteral);
+  }
+
+  return source.replace(targetRuleRegex, `${targetRulePrefix}${updatedRhs}`);
+}
+
+function removeRuleDefinitions(source, ruleNames) {
+  const removalSet = new Set(ruleNames);
+
+  return source
+    .split(/\r?\n/)
+    .filter((line) => {
+      const match = line.match(/^\s*([A-Za-z][A-Za-z0-9-]*)\s*=/);
+      if (!match) {
+        return true;
+      }
+      return !removalSet.has(match[1]);
+    })
+    .join("\n");
+}
+
+function findRuleBlock(lines, ruleName) {
+  const ruleStartRegex = new RegExp(`^\\s*${escapeRegExp(ruleName)}\\s*=`);
+  const startIndex = lines.findIndex((line) => ruleStartRegex.test(line));
+  if (startIndex === -1) {
+    throw new Error(`Rule ${ruleName} was not found.`);
+  }
+
+  let endIndex = startIndex + 1;
+  while (endIndex < lines.length && /^\s/.test(lines[endIndex])) {
+    endIndex += 1;
+  }
+
+  return {
+    startIndex,
+    endIndex,
+    blockLines: lines.slice(startIndex, endIndex),
+  };
+}
+
+function repositionRulesAfter(source, reorderings) {
+  let lines = source.split(/\r?\n/);
+
+  for (const { ruleName, afterRule } of reorderings) {
+    const ruleBlock = findRuleBlock(lines, ruleName);
+    lines.splice(ruleBlock.startIndex, ruleBlock.endIndex - ruleBlock.startIndex);
+
+    const afterRuleBlock = findRuleBlock(lines, afterRule);
+    lines.splice(afterRuleBlock.endIndex, 0, ...ruleBlock.blockLines);
+  }
+
+  return lines.join("\n");
+}
+
 function processAbnfSource(source) {
   let processed = source;
 
@@ -97,7 +248,23 @@ function processAbnfSource(source) {
     processed = inlineHexRuleAsLiteral(processed, ruleName);
   }
 
+  for (const { targetRule, referencedRules } of INLINE_LITERAL_REFS) {
+    processed = inlineLiteralRefsInTargetRule(processed, targetRule, referencedRules);
+    processed = removeRuleDefinitions(processed, referencedRules);
+  }
+
+  processed = repositionRulesAfter(processed, REPOSITION_RULES_AFTER);
+
   return processed;
+}
+
+function postProcessGeneratedHtml(htmlPath) {
+  const html = fs.readFileSync(htmlPath, "utf8");
+  const updated = html.replace(/<h1>[^<]*<\/h1>/, `<h1>${FORCED_HTML_HEADER}</h1>`);
+
+  if (updated !== html) {
+    fs.writeFileSync(htmlPath, updated, "utf8");
+  }
 }
 
 const args = process.argv.slice(2);
@@ -173,4 +340,15 @@ if (result.error) {
   process.exit(1);
 }
 
-process.exit(result.status === null ? 1 : result.status);
+if (result.status !== 0) {
+  process.exit(result.status === null ? 1 : result.status);
+}
+
+try {
+  postProcessGeneratedHtml(outputPath);
+} catch (error) {
+  console.error(`Failed to post-process generated HTML: ${error.message}`);
+  process.exit(1);
+}
+
+process.exit(0);

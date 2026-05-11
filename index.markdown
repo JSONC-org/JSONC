@@ -20,7 +20,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 The following terms are used throughout this specification:
 
 - **Insignificant Whitespace**: Any sequence of space characters, tabs or line endings that is not part of a string. It is generally ignored by parsers and is used to format JSONC documents for better readability.
-- **Line ending**: Refers to the sequence of (often invisible) control characters that indicate the end of a line. In JSONC, this sequence can be represented by a line feed (LF) or a carriage return followed by a line feed (CRLF). In terms of Unicode, LF corresponds to U+000A and CR corresponds to U+000D.
+- **Line ending**: Refers to the sequence of (often invisible) control characters that indicate the end of a line. In JSONC, this sequence can be represented by a line feed (LF), a carriage return followed by a line feed (CRLF) or a lone carriage return (CR). In terms of Unicode, LF corresponds to U+000A and CR corresponds to U+000D.
 - **Mode line**: A special comment at the beginning of a file that specifies the file type or mode, following conventions used by text editors like Emacs (or sometimes Vim).
 - **Parser**: A software component that reads and interprets JSONC documents.
 - **Trailing comma**: A comma that appears after the last element in an array or the last member in an object, before the closing bracket or brace.
@@ -108,6 +108,16 @@ Consumers that support JSONC SHOULD accept `application/jsonc`.
 
 - Configuration Files: JSONC is useful for configuration files where comments can provide explanations or instructions.
 - Data Annotation: JSONC allows developers to annotate JSON data with comments for better understanding and maintenance.
+
+## Formal grammar
+
+The formal grammar of JSONC is available here:
+
+- [JSONC ABNF Grammar]({{ '/grammar/JSONC.abnf' | relative_url }})
+
+For a visual representation of the grammar rules, see the JSONC railroad diagram page:
+
+- [JSONC Railroad Diagram]({{ '/grammar/railroad-diagram.html' | relative_url }})
 
 ## Tools and Libraries
 Several tools and libraries support JSONC, enabling developers to parse and generate JSONC data easily.

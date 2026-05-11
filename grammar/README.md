@@ -4,7 +4,7 @@ This directory contains the ABNF grammar for JSONC, along with plans for generat
 
 ## Railroad Diagram Generation Plan
 
-Generate railroad diagrams from `grammar/jsonc.abnf` using a simple one-file Node.js script.
+Generate railroad diagrams from `grammar/JSONC.abnf` using a simple one-file Node.js script.
 
 Instead of building a custom ABNF parser and converter to Tab Atkins constructor calls, use:
 
@@ -18,7 +18,7 @@ The wrapper script should:
 
 1. Accept input ABNF path and optional output HTML path.
 2. Default to:
-   - input: `grammar/jsonc.abnf`
+   - input: `grammar/JSONC.abnf`
    - output: `grammar/railroad-diagram.html`
 3. Optionally accept `--title` to set the HTML title.
 4. Execute the upstream CLI from our installed dependency.
@@ -53,13 +53,13 @@ npm run railroad
 Generate from a specific input and output:
 
 ```bash
-npm run railroad -- grammar/jsonc.abnf grammar/railroad-diagram.html
+npm run railroad -- grammar/JSONC.abnf grammar/railroad-diagram.html
 ```
 
 Generate with a custom title:
 
 ```bash
-npm run railroad -- grammar/jsonc.abnf grammar/railroad-diagram.html --title "JSONC Grammar"
+npm run railroad -- grammar/JSONC.abnf grammar/railroad-diagram.html --title "JSONC Grammar"
 ```
 
 ### Notes on EOF for single-line comments
