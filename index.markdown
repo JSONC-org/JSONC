@@ -73,7 +73,7 @@ Multi-line comments cannot be nested. The closing of the nested comment will be 
 }
 ```
 
-## Trailing commas
+### Trailing Commas
 
 JSONC parsers MAY support trailing commas. For more information regarding trailing commas, refer to [Appendix A](#appendix-a-trailing-commas-and-jsonc).
 
@@ -81,7 +81,7 @@ JSONC parsers MAY support trailing commas. For more information regarding traili
 
 Comments in JSONC are ignored during parsing, allowing developers to annotate their JSON data without affecting its structure or content.
 
-## Filename extension
+## Filename Extension
 
 The recommended file extension for JSONC documents is `.jsonc`.
 
@@ -96,7 +96,7 @@ or
 // -*- jsonc -*-
 ```
 
-## Media type
+## Media Type
 
 When transmitting JSONC over a network, senders SHOULD use the media type `application/jsonc`.
 
@@ -109,7 +109,7 @@ Consumers that support JSONC SHOULD accept `application/jsonc`.
 - Configuration Files: JSONC is useful for configuration files where comments can provide explanations or instructions.
 - Data Annotation: JSONC allows developers to annotate JSON data with comments for better understanding and maintenance.
 
-## Formal grammar
+## Formal Grammar
 
 The formal grammar of JSONC is available here:
 
