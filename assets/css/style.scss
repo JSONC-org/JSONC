@@ -192,6 +192,14 @@ body {
     transform: translateX(0);
   }
 
+  .toc-list li {
+    margin: 3px 0;
+  }
+
+  .toc-list a {
+    padding: 0.35rem 0.3rem;
+  }
+
   .toc-backdrop {
     display: none;
     position: fixed;
