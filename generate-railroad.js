@@ -97,7 +97,7 @@ function decodeAbnfHexSequence(value) {
   return String.fromCodePoint(...bytes);
 }
 
-function getHexRuleLiteral(source, ruleName) {
+function getHexRuleSequence(source, ruleName) {
   const escapedRuleName = escapeRegExp(ruleName);
   const ruleRegex = new RegExp(
     `^\\s*${escapedRuleName}\\s*=\\s*(%x[0-9A-Fa-f]+(?:\\.[0-9A-Fa-f]+)*)\\b.*$`,
@@ -108,7 +108,11 @@ function getHexRuleLiteral(source, ruleName) {
     throw new Error(`Rule ${ruleName} was not found.`);
   }
 
-  return decodeAbnfHexSequence(ruleMatch[1]);
+  return ruleMatch[1];
+}
+
+function getHexRuleLiteral(source, ruleName) {
+  return decodeAbnfHexSequence(getHexRuleSequence(source, ruleName));
 }
 
 function inlineHexRuleAsLiteral(source, ruleName) {
@@ -178,8 +182,7 @@ function inlineLiteralRefsInTargetRule(source, targetRule, referencedRules) {
 
   let updatedRhs = targetRuleRhs;
   for (const referencedRule of referencedRules) {
-    const literalValue = getHexRuleLiteral(source, referencedRule);
-    const replacementLiteral = `"${literalValue.replace(/"/g, '\\"')}"`;
+    const replacementLiteral = getHexRuleSequence(source, referencedRule);
     const referencedRuleRegex = new RegExp(
       `(?<![A-Za-z0-9-])${escapeRegExp(referencedRule)}(?![A-Za-z0-9-])`,
       "g",
