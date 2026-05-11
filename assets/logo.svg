@@ -1,0 +1,43 @@
+<svg width="480" height="480" viewBox="120 105 480 480" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" overflow="visible">
+    <defs>
+        <clipPath id="clip0">
+            <rect x="270" y="220" width="320" height="320" />
+        </clipPath>
+        <clipPath id="clip1">
+            <rect x="270" y="220" width="320" height="320" />
+        </clipPath>
+        <clipPath id="clip2">
+            <rect x="270" y="220" width="320" height="320" />
+        </clipPath>
+        <linearGradient x1="374.867" y1="288.868" x2="536.196" y2="450.203"
+            gradientUnits="userSpaceOnUse" spreadMethod="pad" id="fill3">
+            <stop offset="0" />
+            <stop offset="1" stop-color="#89c56e" />
+        </linearGradient>
+        <linearGradient x1="536.196" y1="450.203" x2="374.867" y2="288.882"
+            gradientUnits="userSpaceOnUse" spreadMethod="pad" id="fill4">
+            <stop offset="0" />
+            <stop offset="1" stop-color="#89c56e" />
+        </linearGradient>
+    </defs>
+    <g>
+        <g clip-path="url(#clip0)" transform="translate(-10 0)">
+            <g clip-path="url(#clip1)">
+                <g clip-path="url(#clip2)">
+                    <g transform="translate(570, 369.5) scale(1.1) translate(-570, -369.5)">
+                        <path
+                            d="M455.307 425.462C505.97 494.527 555.552 406.184 555.479 353.059 555.392 290.247 491.729 255.142 455.265 255.142 396.739 255.142 341 303.512 341 369.693 341 443.254 404.891 484 455.265 484 443.866 482.359 405.879 474.219 405.368 386.722 405.024 327.544 424.672 303.902 455.182 314.302 455.866 314.556 488.837 327.562 488.837 370.051 488.837 412.359 455.307 425.462 455.307 425.462Z"
+                            fill="url(#fill3)" fill-rule="evenodd" />
+                        <path
+                            d="M455.247 314.255C421.77 302.717 380.76 330.308 380.76 385.573 380.76 475.81 447.63 484 455.735 484 514.261 484 570 435.629 570 369.448 570 295.888 506.109 255.142 455.735 255.142 469.687 253.21 530.934 270.241 530.934 353.951 530.934 408.54 485.201 438.259 455.457 425.561 454.774 425.307 421.803 412.301 421.803 369.812 421.803 327.504 455.247 314.254 455.247 314.254Z"
+                            fill="url(#fill4)" fill-rule="evenodd" />
+                    </g>
+                </g>
+            </g>
+        </g>
+        <!-- Forward Slashes-->
+        <text fill="#6A9955" font-family="Aptos Display,Aptos Display_MSFontService,sans-serif"
+            font-weight="400" font-size="382.667" letter-spacing="-50" transform="translate(152.073 483)">//</text>
+    </g>
+</svg>

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "dev": "bundle exec jekyll serve --livereload --host 0.0.0.0 --port 4000",
     "railroad": "node generate-railroad.js"
   },
   "dependencies": {
