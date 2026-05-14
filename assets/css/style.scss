@@ -253,6 +253,20 @@ body {
 }
 
 /* Custom Highlight.js Styles */
+.main-content pre,
+.main-content .highlight pre {
+  background-color: #1e1e1e;
+  border-color: #2d2d30;
+  color: #dcdcdc;
+}
+
+.main-content pre > code.hljs,
+.main-content .highlight pre > code.hljs {
+  display: block;
+  color: inherit;
+  background: transparent;
+}
+
 .hljs-error {
     color: red !important;
     font-weight: bold;
