@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="{{ '/assets/js/highlight-jsonc.js' | relative_url }}"></script>
     {% include head-custom.html %}
   </head>
   <body>
@@ -64,8 +65,6 @@
       </main>
     </div>
   </body>
-  <script>hljs.highlightAll();</script>
-
   <!-- TOC burger toggle -->
   <script>
     (function () {
@@ -150,7 +149,7 @@
   <script>
     function markInvalidNumbers(codeBlock) {
       var spans = codeBlock.querySelectorAll("span");
-  
+
       for (let i = 1; i < spans.length; i++) {
         if (
           spans[i].classList.contains("hljs-number") &&
@@ -161,16 +160,11 @@
         }
       }
     }
-  
+
+    hljs.highlightAll();
+
     document.querySelectorAll("code.language-jsonc").forEach((codeBlock) => {
-      const observer = new MutationObserver((mutations, obs) => {
-        if (codeBlock.querySelector("span")) {
-          markInvalidNumbers(codeBlock); // Run script when syntax highlighting is applied
-          obs.disconnect(); // Stop observing once highlighting is complete
-        }
-      });
-  
-      observer.observe(codeBlock, { childList: true });
+      markInvalidNumbers(codeBlock);
     });
   </script>
   

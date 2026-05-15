@@ -268,9 +268,11 @@ body {
 }
 
 .hljs-error {
-    color: red !important;
-    font-weight: bold;
-    background-color: rgba(255, 0, 0, 0.2);
-    border-radius: 3px;
-    padding: 2px 4px;
-  }
+  color: #ff5f56 !important;
+  font-weight: 600;
+  background: transparent;
+}
+
+.hljs-error * {
+  color: inherit !important;
+}

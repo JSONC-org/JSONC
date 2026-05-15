@@ -28,6 +28,10 @@ github_username:  DecimalTurn
 # Syntax highlighting (We are using Highlight.js instead)
 highlighter: none
 
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
+
 # Sass
 sass:
   sass_dir: _sass
