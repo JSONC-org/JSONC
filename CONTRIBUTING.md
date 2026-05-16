@@ -25,7 +25,7 @@ When proposing a new entry, please provide in the PR comment:
 
 ## How to make changes?
 
-For simple textual contributions, you probably only need to make your edit directly to the index.markdown file, so you can skip the Prerequisites and Local Development sections of this guide.
+For simple textual contributions, you probably only need to make your edit directly to the index.md file, so you can skip the Prerequisites and Local Development sections of this guide.
 
 For more involved contributions, you can make your edits and preview the changes using the guide below. Note that you can also create a codespace for this repo and all prerequisites will already be installed.
 

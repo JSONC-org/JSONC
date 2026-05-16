@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const filePath = path.join(__dirname, "index.markdown");
+const filePath = path.join(__dirname, "index.md");
 const content = fs.readFileSync(filePath, "utf8");
 
 // Extract the "Tools and Libraries" section
