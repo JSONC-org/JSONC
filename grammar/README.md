@@ -64,10 +64,12 @@ npm run railroad -- grammar/JSONC.abnf grammar/railroad-diagram.html --title "JS
 
 ### Notes on EOF for single-line comments
 
-The grammar already allows inline comments to terminate at end-of-file because the line terminator is optional:
+The grammar already allows inline comments to terminate at end-of-file because the `single-line-comment` rule does not contain the line terminator:
 
 ```abnf
-single-line-comment = "//" *single-line-comment-char [ comment-terminator ]
+single-line-comment = "//" *single-line-comment-char
 ```
 
-So diagrams generated from this ABNF should not imply a mandatory line ending.
+ABNF (RFC 5234) does not specify whether greedy matching should be used for repetitive syntax. However, greedy matching is mandatory in the `single-line-comment` rule to ensure correct behavior.
+
+Additionally, when LS (U+2028) or PS (U+2029) appears in a single-line comment, it will end the comment and be used as the next input, thus causing parsing failure as an illegal character.
