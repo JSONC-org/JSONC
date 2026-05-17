@@ -21,9 +21,8 @@ comment = single-line-comment / multi-line-comment
 ; Single-line comment: starts with //, continues until line ending
 ; Note that the single-line-comment-end is optional, allowing comments to end at the end of the file without a line terminator.
 single-line-comment-start = %x2F.2F             ; // double solidus
-single-line-comment-end = %x0D.0A / %x0A / %x0D
-single-line-comment = single-line-comment-start *single-line-comment-char [ single-line-comment-end ]
-single-line-comment-char = %x00-09 / %x0B-0C / %x0E-10FFFF ; Any source character except CR and LF (line terminator)
+single-line-comment = single-line-comment-start *single-line-comment-char ; Note that this rule should be greedy to consume all characters until the end of the line or the end of the input.
+single-line-comment-char = %x00-09 / %x0B-0C / %x0E-2027 / %x2029-10FFFF ; Any source character except CR, LF, LS and PS (line terminator)
 
 ; Multi-line comment: /* ... */
 ; Cannot be nested. The first */ closes the comment.
