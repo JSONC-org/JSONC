@@ -120,42 +120,9 @@ For a visual representation of the grammar rules, see the JSONC railroad diagram
 - [JSONC Railroad Diagram]({{ '/grammar/railroad-diagram.html' | relative_url }})
 
 ## Tools and Libraries
-Several tools and libraries support JSONC, enabling developers to parse and generate JSONC data easily.
 
-Here is a non-exhaustive list:
-
-**C++**
-- [nlohmann/json](https://github.com/nlohmann/json) `ignore_comments`, `ignore_trailing_commas`
-- [RapidJSON](https://github.com/Tencent/rapidjson) `kParseCommentsFlag`, `kParseTrailingCommasFlag`
-- [stephenberry/glaze](https://github.com/stephenberry/glaze)
-
-**Elixir**
-- [massivefermion/jsonc](https://github.com/massivefermion/jsonc)
-
-**Go**
-- [HuJSON](https://github.com/tailscale/hujson)
-- [tidwall/jsonc](https://github.com/tidwall/jsonc)
-
-**Java**
-- [Jackson](https://github.com/FasterXML/jackson-core) `JsonFactory.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)` 
-
-**JavaScript/TypeScript**:
-- [microsoft/node-jsonc-parser](https://github.com/microsoft/node-jsonc-parser)
-
-**Kotlin**
-- [kotlinx.serialization.json](https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-builder/allow-comments.html)
-
-**PHP**
-- [otar/jsonc](https://github.com/otar/jsonc)
-
-**Python**
-- [n-takumasa/json-with-comments](https://github.com/n-takumasa/json-with-comments)
-
-**Rust**
-- [dprint/jsonc-parser](https://github.com/dprint/jsonc-parser)
-
-**Swift**
-- [steelbrain/JSONCKit](https://github.com/steelbrain/JSONCKit)
+For a community-maintained list of JSONC tools and libraries, please refer to the following page:
+-  [Tools and Libraries]({{ '/tools.html' | relative_url }})
 
 ## APPENDIX A: Trailing Commas and JSONC
 
