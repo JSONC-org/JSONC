@@ -3,28 +3,37 @@
 const fs = require("fs");
 const path = require("path");
 
-const filePath = path.join(__dirname, "index.md");
+const filePath = path.join(__dirname, "tools.md");
 const content = fs.readFileSync(filePath, "utf8");
 
-// Extract the "Tools and Libraries" section
-const sectionMatch = content.match(/## Tools and Libraries([\s\S]*?)(?=\n## |\n#+ |$)/);
-if (!sectionMatch) {
-  console.error("Could not find the 'Tools and Libraries' section.");
+// Extract rows from the "Parsers" markdown table.
+const parserSectionMatch = content.match(/##\s+Parsers([\s\S]*?)(?=\n##\s+|\n#+\s+|\n<hr>|$)/);
+if (!parserSectionMatch) {
+  console.error("Could not find the 'Parsers' section in tools.md.");
   process.exit(1);
 }
 
-const section = sectionMatch[1];
+const section = parserSectionMatch[1];
 
-// Extract language headers (lines like **Language**)
-const languageRegex = /^\*\*(.+?)\*\*/gm;
+// Extract language names from the first column of each table row.
+const languageRegex = /^\|\s*([^|]+?)\s*\|/gm;
 const languages = [];
 let match;
 while ((match = languageRegex.exec(section)) !== null) {
-  languages.push(match[1]);
+  const language = match[1].trim();
+  if (!language || language.toLowerCase() === "language") {
+    continue;
+  }
+  // Skip markdown separator rows.
+  if (/^[:\-\s]+$/.test(language)) {
+    continue;
+  }
+
+  languages.push(language);
 }
 
 if (languages.length === 0) {
-  console.error("No language headers found in the 'Tools and Libraries' section.");
+  console.error("No language rows found in the 'Parsers' table in tools.md.");
   process.exit(1);
 }
 
@@ -50,7 +59,7 @@ if (inOrder) {
 } else {
   console.error();
   console.error(
-    "The 'Tools and Libraries' section must stay in alphabetical order.",
+    "The language column in tools.md (Parsers table) must stay in alphabetical order.",
   );
   process.exit(1);
 }
